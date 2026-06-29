@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: mini-borsa-postgres
+    environment:
+      POSTGRES_USER: borsa
+      POSTGRES_PASSWORD: borsa
+      POSTGRES_DB: borsa
+    ports:
+      - "5432:5432"
+    volumes:
+      - borsa-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U borsa"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  borsa-data:

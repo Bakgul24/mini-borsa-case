@@ -1,0 +1,65 @@
+# ===== Bağımlılıklar =====
+node_modules/
+**/node_modules/
+.pnp/
+.pnp.js
+
+# ===== Ortam değişkenleri (GİZLİ BİLGİLER) =====
+.env
+.env.local
+.env.*.local
+.env.test
+**/.env
+**/.env.local
+
+# ===== Log dosyaları =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===== Build / derlenmiş çıktılar =====
+dist/
+build/
+out/
+**/dist/
+**/build/
+
+# ===== Test / coverage raporları =====
+coverage/
+.nyc_output/
+jest-coverage/
+
+# ===== Cache =====
+.npm/
+.eslintcache
+.cache/
+
+# ===== Editör / IDE dosyaları =====
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ===== İşletim sistemi dosyaları =====
+Thumbs.db
+desktop.ini
+
+# ===== Veritabanı / Docker =====
+*.pid
+pgdata/
+postgres-data/
+
+# ===== Geçici dosyalar =====
+*.tmp
+*.temp
+.tmp/
+
+# ===== TypeScript (ileride kullanılırsa) =====
+*.tsbuildinfo
+
+# ===== PM2 (process manager, ileride kullanılabilir) =====
+.pm2/
