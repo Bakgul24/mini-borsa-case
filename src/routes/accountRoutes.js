@@ -21,6 +21,12 @@ router.get('/accounts/:id', async (req, res, next) => {
 
 router.get('/accounts/:id/portfolio', async (req, res, next) => {
     try {
+        // Önce hesap var mı kontrol et
+        const accountCheck = await pool.query('SELECT id FROM accounts WHERE id = $1', [req.params.id]);
+        if (accountCheck.rows.length === 0) {
+            throw new NotFoundError(`${req.params.id} numaralı hesap bulunamadı`);
+        }
+
         const result = await pool.query(
             `SELECT h.symbol, s.name, h.quantity, s.price_kurus
        FROM holdings h
@@ -43,6 +49,12 @@ router.get('/accounts/:id/portfolio', async (req, res, next) => {
 
 router.get('/accounts/:id/transactions', async (req, res, next) => {
     try {
+        // Önce hesap var mı kontrol et
+        const accountCheck = await pool.query('SELECT id FROM accounts WHERE id = $1', [req.params.id]);
+        if (accountCheck.rows.length === 0) {
+            throw new NotFoundError(`${req.params.id} numaralı hesap bulunamadı`);
+        }
+
         const result = await pool.query(
             `SELECT id, type, symbol, quantity, price_kurus, total_kurus, created_at
        FROM transactions WHERE account_id = $1 ORDER BY created_at DESC`,
