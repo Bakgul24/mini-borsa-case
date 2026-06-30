@@ -1,15 +1,10 @@
-// src/db/setup.js
-//
-// Tabloları oluşturur. Hem geliştirme (borsa) hem test (borsa_test) DB'sinde
-// ayrı ayrı çalıştırılması gerekir (NODE_ENV ile).
-
 require('dotenv').config();
 const { Pool } = require('pg');
 
 const connectionString =
-    process.env.NODE_ENV === 'test'
-        ? process.env.TEST_DATABASE_URL
-        : process.env.DATABASE_URL;
+  process.env.NODE_ENV === 'test'
+    ? process.env.TEST_DATABASE_URL
+    : process.env.DATABASE_URL;
 
 const pool = new Pool({ connectionString });
 
@@ -45,15 +40,15 @@ CREATE TABLE IF NOT EXISTS transactions (
 `;
 
 async function setup() {
-    try {
-        await pool.query(SCHEMA_SQL);
-        console.log(`✅ Tablolar oluşturuldu (${process.env.NODE_ENV === 'test' ? 'test' : 'development'} DB)`);
-    } catch (err) {
-        console.error('❌ Tablo oluşturma hatası:', err.message);
-        process.exit(1);
-    } finally {
-        await pool.end();
-    }
+  try {
+    await pool.query(SCHEMA_SQL);
+    console.log(`✅ Tablolar oluşturuldu (${process.env.NODE_ENV === 'test' ? 'test' : 'development'} DB)`);
+  } catch (err) {
+    console.error('❌ Tablo oluşturma hatası:', err.message);
+    process.exit(1);
+  } finally {
+    await pool.end();
+  }
 }
 
 setup();

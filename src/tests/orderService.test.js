@@ -30,7 +30,6 @@ describe('buyStock', () => {
     test('yetersiz bakiyede BusinessRuleError fırlatır, hiçbir şeyi değiştirmez', async () => {
         await expect(buyStock(1, 'THYAO', 999999)).rejects.toThrow(BusinessRuleError);
 
-        // Bakiyenin DEĞİŞMEDİĞİNİ doğrula (rollback gerçekten çalıştı mı)
         const account = await pool.query('SELECT cash_balance_kurus FROM accounts WHERE id = 1');
         expect(account.rows[0].cash_balance_kurus).toBe(10000000);
     });
@@ -78,7 +77,6 @@ describe('sellStock', () => {
         await buyStock(1, 'THYAO', 5);
         await expect(sellStock(1, 'THYAO', 10)).rejects.toThrow(BusinessRuleError);
 
-        // Holdings'in DEĞİŞMEDİĞİNİ doğrula
         const holding = await pool.query(
             'SELECT quantity FROM holdings WHERE account_id = 1 AND symbol = $1',
             ['THYAO']
@@ -89,10 +87,6 @@ describe('sellStock', () => {
 
 describe('eşzamanlılık (concurrency) - FOR UPDATE kilidinin doğru çalıştığını kanıtlar', () => {
     test('aynı hesaba aynı anda gelen iki alım isteği, bakiyeyi YANLIŞ hesaplamamalı', async () => {
-        // Hesap: 100.000 TL. THYAO: 300 TL. Tek seferde max ~333 adet alınabilir.
-        // İki paralel istek, her biri 200 adet almaya çalışsın (200*300=60000 TL).
-        // İkisi birden başarılı olursa toplam 120.000 TL gerekir, ama hesapta sadece 100.000 TL var.
-        // Eğer kilit doğru çalışıyorsa, biri başarılı olur, diğeri yetersiz bakiyeden reddedilir.
 
         const results = await Promise.allSettled([
             buyStock(1, 'THYAO', 200),
@@ -102,11 +96,9 @@ describe('eşzamanlılık (concurrency) - FOR UPDATE kilidinin doğru çalışt�
         const succeeded = results.filter((r) => r.status === 'fulfilled');
         const failed = results.filter((r) => r.status === 'rejected');
 
-        // Sadece biri başarılı olmalı (200*300=60000, ikisi birden 120000 eder ama bakiye yetersiz)
         expect(succeeded.length).toBe(1);
         expect(failed.length).toBe(1);
 
-        // Bakiyenin tutarlı kaldığını doğrula - negatife düşmemiş olmalı
         const account = await pool.query('SELECT cash_balance_kurus FROM accounts WHERE id = 1');
         expect(account.rows[0].cash_balance_kurus).toBeGreaterThanOrEqual(0);
         expect(account.rows[0].cash_balance_kurus).toBe(10000000 - 60000 * 100); // sadece 1 alım gerçekleşti üzerinden hesap

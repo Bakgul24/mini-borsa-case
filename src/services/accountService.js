@@ -1,4 +1,3 @@
-// src/services/accountService.js
 const pool = require('../db/pool');
 const { NotFoundError } = require('../errors');
 

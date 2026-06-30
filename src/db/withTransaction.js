@@ -1,10 +1,3 @@
-// src/db/withTransaction.js
-//
-// Verilen fonksiyonu bir veritabanı transaction'ı içinde çalıştırır.
-// Fonksiyon başarılıysa COMMIT yapılır, hata fırlatırsa ROLLBACK yapılır.
-// Fonksiyona, transaction'a bağlı TEK bir "client" verilir - tüm sorgular
-// bu client üzerinden gitmeli, aksi halde aynı transaction'da olmazlar.
-
 const pool = require('./pool');
 
 async function withTransaction(fn) {
@@ -17,9 +10,9 @@ async function withTransaction(fn) {
         return result;
     } catch (err) {
         await client.query('ROLLBACK');
-        throw err; // hatayı çağırana ilet, sessizce yutmuyoruz
+        throw err;
     } finally {
-        client.release(); // bağlantıyı pool'a geri ver (her durumda, hata olsa da olmasa da)
+        client.release();
     }
 }
 

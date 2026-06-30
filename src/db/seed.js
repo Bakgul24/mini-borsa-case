@@ -1,8 +1,3 @@
-// src/db/seed.js
-//
-// Başlangıç verisini yükler: 3 hisse + 100.000 TL'lik tek hesap.
-// Zaten varsa tekrar eklemez (idempotent).
-
 require('dotenv').config();
 const { Pool } = require('pg');
 
@@ -14,12 +9,12 @@ const connectionString =
 const pool = new Pool({ connectionString });
 
 const STOCKS = [
-    { symbol: 'THYAO', name: 'Türk Hava Yolları', priceKurus: 30000 },  // 300.00 TL
-    { symbol: 'GARAN', name: 'Garanti Bankası', priceKurus: 13000 },     // 130.00 TL
-    { symbol: 'ASELS', name: 'Aselsan', priceKurus: 7500 },              // 75.00 TL
+    { symbol: 'THYAO', name: 'Türk Hava Yolları', priceKurus: 30000 },
+    { symbol: 'GARAN', name: 'Garanti Bankası', priceKurus: 13000 },
+    { symbol: 'ASELS', name: 'Aselsan', priceKurus: 7500 },
 ];
 
-const STARTING_BALANCE_KURUS = 10000000; // 100.000,00 TL
+const STARTING_BALANCE_KURUS = 10000000;
 
 async function seed() {
     try {
@@ -32,7 +27,6 @@ async function seed() {
             );
         }
 
-        // Hesap id=1 zaten var mı kontrol et, yoksa oluştur
         const existing = await pool.query('SELECT id FROM accounts WHERE id = 1');
         if (existing.rows.length === 0) {
             await pool.query(

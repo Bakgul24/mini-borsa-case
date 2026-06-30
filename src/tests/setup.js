@@ -1,4 +1,3 @@
-// src/tests/setup.js
 process.env.NODE_ENV = 'test';
 
 const pool = require('../db/pool');

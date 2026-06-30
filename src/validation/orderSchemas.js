@@ -1,4 +1,3 @@
-// src/validation/orderSchemas.js
 const { z } = require('zod');
 
 const orderBodySchema = z.object({

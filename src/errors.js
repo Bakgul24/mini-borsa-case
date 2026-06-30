@@ -1,8 +1,3 @@
-// src/errors.js
-//
-// Servis katmanının fırlatacağı özel hata sınıfları.
-// Merkezi hata yöneticisi (error handler middleware) bunları HTTP koduna çevirecek.
-
 class NotFoundError extends Error {
     constructor(message) {
         super(message);

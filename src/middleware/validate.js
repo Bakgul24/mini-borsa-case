@@ -1,4 +1,3 @@
-// src/middleware/validate.js
 const { ValidationError } = require('../errors');
 
 function validateBody(schema) {
@@ -12,7 +11,7 @@ function validateBody(schema) {
             return next(new ValidationError(message));
         }
 
-        req.body = result.data; // doğrulanmış/dönüştürülmüş veriyi kullan
+        req.body = result.data;
         next();
     };
 }
