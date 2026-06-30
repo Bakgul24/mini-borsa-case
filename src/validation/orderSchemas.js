@@ -1,3 +1,6 @@
+// src/validation/orderSchemas.js
+const { z } = require('zod');
+
 const orderBodySchema = z.object({
     accountId: z.number().int().positive(),
     symbol: z.string().min(1).max(10),
@@ -9,3 +12,5 @@ const orderBodySchema = z.object({
         message: 'quantity pozitif bir değer olmalıdır (sıfır veya negatif kabul edilmez)',
     }),
 });
+
+module.exports = { orderBodySchema };
